@@ -6,6 +6,7 @@ internal class Program
     {
         // Счётчик коктейлей
         uint idNumber = 1;
+
         var testList = new List<Ingredient>
         {
             AssemblyObject.CreateIngredient("voda", "opisanie", 0),
@@ -21,12 +22,11 @@ internal class Program
         {
            
 
-            var testCocktail1 = AssemblyObject.CreateCocktail(idNumber, "name", "opisanie", testList, 5, idNumber);
-            var testCocktail = testCocktail1.Item1;
-            idNumber = testCocktail1.Item2;
+            var testCocktail = AssemblyObject.CreateCocktail(idNumber, "name", "opisanie", testList, 5);
             cocktails.Add(testCocktail);
 
             Console.WriteLine($"{testCocktail.Id}, {testCocktail.Name} {testCocktail.Compound[1].Name}");
+            idNumber++;
             Console.WriteLine(idNumber);
 
         } while (idNumber != 351);

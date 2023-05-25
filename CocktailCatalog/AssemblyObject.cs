@@ -9,11 +9,10 @@ namespace CocktailCatalog
     internal static class AssemblyObject
     {
         //Метод порождающий коктейль.
-        public static (Cocktail,uint) CreateCocktail(uint id, string name, string description, List<Ingredient> compound, int vol, uint count)
+        public static Cocktail CreateCocktail(uint id, string name, string description, List<Ingredient> compound, int vol)
         {
             var coctail = new Cocktail(id, name, description, compound, vol);
-            count++;
-            return (coctail,count);
+            return coctail;
         }
         //Метод порождающий ингредиент
         public static Ingredient CreateIngredient(string name, string description, int vol)
