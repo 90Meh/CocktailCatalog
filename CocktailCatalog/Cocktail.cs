@@ -24,5 +24,14 @@ namespace CocktailCatalog
         public List<Ingredient> Compound { get; set; }
         public int Vol { get; set; }
 
+        //Метод присвоения пустых значений
+        public void Empty ()
+        {
+            Id = 1;
+            Name = string.Empty;
+            Description = string.Empty;
+            Compound = new List<Ingredient>();
+            Vol = 0;
+        }
     }
 }
