@@ -54,7 +54,15 @@ internal class Program
                     cocktails.Add(AssemblyObject.CreateCocktail(idNumber, testList));                    
                     break;
                 case "search":
-                    UserInOut.SearchCocktail(cocktails, testList);
+                    var foundCocktail = UserInOut.SearchCocktail(cocktails, testList);
+                    Console.WriteLine($"Имя - {foundCocktail.Name}");
+                    Console.WriteLine($"Id - {foundCocktail.Id}");
+                    Console.WriteLine($"Описание - {foundCocktail.Description}");
+                    Console.WriteLine($"Крепость - {foundCocktail.Vol}");
+                    break;
+                case "Change":
+                    Console.WriteLine("Выберите коктейль для изменения");
+                    
                     break;
                 default:
                     break;

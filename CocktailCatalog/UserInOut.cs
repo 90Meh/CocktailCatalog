@@ -15,9 +15,11 @@ namespace CocktailCatalog
             Console.WriteLine("Выберите параметр для поиска: Name/Id/Vol/Ingr");
             var cocktail = new Cocktail(1, string.Empty, string.Empty, ingredients, 1);
             var input = Console.ReadLine().ToLower();
+            bool stop = true;
 
             do
             {
+                stop = true;                 
                 switch (input)
                 {
                     case "name":
@@ -25,7 +27,7 @@ namespace CocktailCatalog
                         var name = Console.ReadLine().ToLower();
                         foreach (var item in cocktails)
                         {
-                            if (item.Name == name.ToLower())
+                            if (item.Name.ToLower() == name.ToLower())
                             {
                                 cocktail = item;
                                 break;
@@ -34,7 +36,6 @@ namespace CocktailCatalog
                         break;
                     case "id":
                         Console.WriteLine("Введите Id для поиска");
-                        bool stop;
                         do
                         {
                             stop = uint.TryParse(Console.ReadLine(), out uint id);
@@ -57,8 +58,7 @@ namespace CocktailCatalog
                         } while (!stop);
                         break;
                     case "Vol":
-                        Console.WriteLine("Введите Id для поиска");
-                        bool stop;
+                        Console.WriteLine("Введите Крепость для поиска");
                         do
                         {
                             stop = uint.TryParse(Console.ReadLine(), out uint id);
@@ -80,16 +80,17 @@ namespace CocktailCatalog
 
                         } while (!stop);
                         break;
-                        cocktail = cocktails[1];
-                        break;
                     case "Ingr":
-                        cocktail = cocktails[2];
+                        Console.WriteLine("Введите имя инградиента для поиска");
+                        //Реализовать поиск по инградиенту пока возвращает пустой коктейль
                         break;
                     default:
+                        Console.WriteLine("Команда не распознана. Повторите ввод");
+                        stop = false;
                         break;
                 }
-            } while (true);
-
+            } while (!stop);
+            
             return cocktail;
         }
 
