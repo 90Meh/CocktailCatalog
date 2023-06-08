@@ -17,28 +17,7 @@ internal class Program
             AssemblyObject.CreateIngredient("voda", "opisanie", 0),
             AssemblyObject.CreateIngredient("vodka", "opisanie vodki", 40)
         };
-
-
-        //Цикл создающий 350 коктейлей
-        //do
-        //{
-
-
-        //    var testCocktail = AssemblyObject.CreateCocktail(idNumber, "name", "opisanie", testList, 5);
-        //    cocktails.Add(testCocktail);
-
-        //    Console.WriteLine($"{testCocktail.Id}, {testCocktail.Name} {testCocktail.Compound[1].Name}");
-        //    idNumber++;
-        //    Console.WriteLine(idNumber);
-
-        //} while (idNumber != 351);
-
-        //Console.WriteLine("xxxxxxxxxxxxxxxxxxxxx");
-        //Console.WriteLine(cocktails.Count);
-        //foreach (var item in cocktails)
-        //{
-        //    Console.Write($"{item.Id}");
-        //}
+       
         Console.WriteLine("Программа Каталог Коктейлей запущена");
         do
         {
@@ -51,7 +30,8 @@ internal class Program
             switch (input)
             {
                 case "add":
-                    cocktails.Add(AssemblyObject.CreateCocktail(idNumber, testList));                    
+                    cocktails.Add(AssemblyObject.CreateCocktail(idNumber, testList));
+                    idNumber++;
                     break;
                 case "search":
                     var foundCocktail = UserInOut.SearchCocktail(cocktails, testList);
@@ -63,6 +43,10 @@ internal class Program
                 case "Change":
                     Console.WriteLine("Выберите коктейль для изменения");
                     
+                    break;
+                case "Ingr":
+                    Console.WriteLine("Меню управление инградиентами");
+
                     break;
                 default:
                     break;

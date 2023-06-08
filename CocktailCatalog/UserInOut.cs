@@ -14,11 +14,11 @@ namespace CocktailCatalog
             Console.WriteLine("Вы можете найти коктейль по его имени, id номеру, крепости, компонентам которые в нём содержатся");
             Console.WriteLine("Выберите параметр для поиска: Name/Id/Vol/Ingr");
             var cocktail = new Cocktail(1, string.Empty, string.Empty, ingredients, 1);
-            var input = Console.ReadLine().ToLower();
             bool stop = true;
 
             do
             {
+                var input = Console.ReadLine().ToLower();
                 stop = true;                 
                 switch (input)
                 {
