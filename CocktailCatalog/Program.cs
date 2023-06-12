@@ -42,6 +42,12 @@ internal class Program
                     break;
                 case "Change":
                     Console.WriteLine("Выберите коктейль для изменения");
+                    var changeCocktail = UserInOut.SearchCocktail(cocktails, testList);
+                    Console.WriteLine($"Имя - {changeCocktail.Name}");
+                    Console.WriteLine($"Id - {changeCocktail.Id}");
+                    Console.WriteLine($"Описание - {changeCocktail.Description}");
+                    Console.WriteLine($"Крепость - {changeCocktail.Vol}");
+                    Console.WriteLine("Что необходимо изменить?");
                     
                     break;
                 case "Ingr":

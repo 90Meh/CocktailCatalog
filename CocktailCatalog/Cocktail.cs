@@ -33,5 +33,7 @@ namespace CocktailCatalog
             Compound = new List<Ingredient>();
             Vol = 0;
         }
+
+        
     }
 }

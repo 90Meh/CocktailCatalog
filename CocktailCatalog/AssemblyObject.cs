@@ -31,7 +31,6 @@ namespace CocktailCatalog
             } while (!success);
             var coctail = new Cocktail(id, name, description, compound, vol);
             return coctail;
-
         }
         //Метод порождающий ингредиент
         public static Ingredient CreateIngredient(string name, string description, int vol)
