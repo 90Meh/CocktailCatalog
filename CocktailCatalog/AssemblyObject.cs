@@ -18,24 +18,21 @@ namespace CocktailCatalog
             Console.WriteLine("Выберите ингредиенты");
             //Написать логику для ингредиентов, с возможностью добавления или изменения отсюда и выводом списка ингредиентов.
             //Пока получаем готовый список
-            Console.WriteLine("Укажите крепость алкоголя");
-            bool success;
-            int vol;
-            do
-            {
-                success = int.TryParse(Console.ReadLine(), out vol);
-                if (!success)
-                {
-                    Console.WriteLine("Число введено некорректно! Повторите ввод");
-                }
-            } while (!success);
+            Console.WriteLine("Укажите крепость алкоголя");            
+            int vol = SuppotrMhetods.CheckInt(Console.ReadLine());            
             var coctail = new Cocktail(id, name, description, compound, vol);
             return coctail;
 
         }
         //Метод порождающий ингредиент
-        public static Ingredient CreateIngredient(string name, string description, int vol)
+        public static Ingredient CreateIngredient()
         {
+            Console.WriteLine("Введите название ингредиента");
+            var name = Console.ReadLine();
+            Console.WriteLine("Введите описание ингредиента");
+            var description = Console.ReadLine();           
+            Console.WriteLine("Укажите крепость ингредиента");
+            int vol = SuppotrMhetods.CheckInt(Console.ReadLine()); 
             var ingredient = new Ingredient(name, description, vol);
             return ingredient;
         }

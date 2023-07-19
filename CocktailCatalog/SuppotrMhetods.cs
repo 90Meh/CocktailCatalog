@@ -9,32 +9,17 @@ namespace CocktailCatalog
 {
     internal static class SuppotrMhetods
     {
-        public static Cocktail SearchInCollection(List<Cocktail> list, List<Ingredient> ingredients)
-        {
-            var cocktail = new Cocktail(1, string.Empty, string.Empty, ingredients, 1);
-            Console.WriteLine("Введите Id для поиска");
-            bool stop;
-            do
-            {
-                stop = uint.TryParse(Console.ReadLine(), out uint id);
-                if (stop)
-                {
-                    foreach (var item in list)
-                    {
-                        if (item.Id == id)
-                        {
-                            cocktail = item;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Введено не число! Повторите ввод.");
-                }
 
-            } while (!stop);
-            return cocktail;
+        //Повторный запрос числа при ошибке
+        public static int CheckInt(string input)
+        {
+            var succes = int.TryParse(input, out var vol);
+            if (!succes)
+            {
+                Console.WriteLine("Ввод некорректен");
+                CheckInt(Console.ReadLine());
+            }
+            return vol;
         }
     }
 }

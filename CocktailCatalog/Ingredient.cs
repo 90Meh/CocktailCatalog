@@ -17,10 +17,12 @@ namespace CocktailCatalog
             Vol = vol;
         }
 
-        //Свойства прописаны в интерфесе
+        //Свойства описаны в интерфесе
         public string Name { get ; set ; }
         public string Description { get ; set ; }
         public int Vol { get; set; }
+
+
 
        
     }
