@@ -22,7 +22,6 @@ namespace CocktailCatalog
             int vol = SuppotrMhetods.CheckInt(Console.ReadLine());            
             var coctail = new Cocktail(id, name, description, compound, vol);
             return coctail;
-
         }
         //Метод порождающий ингредиент
         public static Ingredient CreateIngredient()
