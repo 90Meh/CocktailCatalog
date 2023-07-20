@@ -13,8 +13,8 @@ internal class Program
         //Ингредиенты добавление
 
         var ingredients = new List<Ingredient> { };
-        
-       
+
+
         Console.WriteLine("Программа Каталог Коктейлей запущена");
         do
         {
@@ -41,10 +41,11 @@ internal class Program
                     break;
                 case "change":
                     Console.WriteLine("Выберите коктейль для изменения");
-                    Cocktail.ChangeCoctail(cocktails, ingredients);                    
+                    Cocktail.ChangeCoctail(cocktails, ingredients);
                     break;
                 case "ingr":
                     Console.WriteLine("Меню управление ингредиентами");
+                    ingredients = SuppotrMhetods.IngredientMenu(ingredients);
 
                     break;
                 case "all":
@@ -54,6 +55,7 @@ internal class Program
                     }
                     break;
                 default:
+                    Console.WriteLine("Действие не найдено");
                     break;
             }
 

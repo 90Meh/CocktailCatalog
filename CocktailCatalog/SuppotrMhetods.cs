@@ -20,6 +20,40 @@ namespace CocktailCatalog
                 CheckInt(Console.ReadLine());
             }
             return vol;
+        }       
+
+        //Управление инградиентами
+        public static List<Ingredient> IngredientMenu (List<Ingredient> ingredients)
+        {
+            Console.WriteLine("Выберите действие");
+            Console.WriteLine("XXXX Добавить ингредиент Add XXXX Найти ингредиент Search XXXX\n " +
+                "XXXX Изменить ингредиент Change XXXXX " +
+                "\n XXXXX  Показать все ингредиент All XXXX Выход из меню - Exit");
+            do
+            {
+                var input = Console.ReadLine().ToLower();
+                switch (input)
+                {
+                    case "add":
+                        
+                        break;
+                    case "search":
+                        
+                        break;
+                    case "change":
+                        
+                        break;
+                    case "all":
+                       
+                        break;
+                    case "exit":
+                        break;
+                    default:
+                        Console.WriteLine("Действие не найдено");
+                        break;
+                }
+            } while (true);
         }
+      
     }
 }
