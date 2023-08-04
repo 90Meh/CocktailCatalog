@@ -4,6 +4,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        //Тестим ветку в GIT///
         // Счётчик коктейлей
         uint idNumber = 1;
 
