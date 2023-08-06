@@ -41,12 +41,11 @@ internal class Program
                     break;
                 case "change":
                     Console.WriteLine("Выберите коктейль для изменения");
-                    Cocktail.ChangeCoctail(cocktails, ingredients);
+                    cocktails = Cocktail.ChangeCoctail(cocktails, ingredients);
                     break;
                 case "ingr":
                     Console.WriteLine("Меню управление ингредиентами");
                     ingredients = SuppotrMhetods.IngredientMenu(ingredients);
-
                     break;
                 case "all":
                     foreach (var item in cocktails)
