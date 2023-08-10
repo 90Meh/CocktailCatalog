@@ -1,4 +1,6 @@
 ﻿using CocktailCatalog;
+using Telegram.Bot;
+using Telegram.Bot.Types;
 
 internal class Program
 {
@@ -8,6 +10,9 @@ internal class Program
         // Счётчик коктейлей
         uint idNumber = 1;
 
+        //Убрать в файлы
+        var tokenTelegram = "6571711315:AAGjvDK6aapilBuwCGhyrbf3d6khq6pBKmw";
+
         //Лист коктейлей
         var cocktails = new List<Cocktail> { };
 
@@ -15,13 +20,15 @@ internal class Program
 
         var ingredients = new List<Ingredient> { };
 
+        MyTelegramBot.StartTelegramBot(tokenTelegram);
 
-        Console.WriteLine("Программа Каталог Коктейлей запущена");
 
+        Console.WriteLine("Программа Каталог Коктейлей запущена");        
         try
         {
             do
             {
+                
 
                 Console.WriteLine("Выберите действие");
                 Console.WriteLine("XXXX Добавить коктейль Add XXXX Найти Коктейль Search XXXX\n " +
