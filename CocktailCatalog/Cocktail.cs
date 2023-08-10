@@ -100,20 +100,27 @@ namespace CocktailCatalog
 
         //Изменение коктейля
 
-        public static Cocktail ChangeCoctail(List<Cocktail> cocktails, List<Ingredient> ingredients)
+        public static List<Cocktail> ChangeCoctail(List<Cocktail> cocktails, List<Ingredient> ingredients)
         {
             var cocktail = SearchCocktail(cocktails, ingredients);
 
-            Console.WriteLine("Название коктейля");
-            cocktail.Name = Console.ReadLine();
-            Console.WriteLine("Описание Коктейля");
-            cocktail.Description = Console.ReadLine();
-            Console.WriteLine("Ингредиенты");
-            //Вызов метода выбора ингредиентов
-            Console.WriteLine("Крепость");
-            cocktail.Vol = SuppotrMhetods.CheckInt(Console.ReadLine());
+            foreach (var item in cocktails)
+            {
+                if (cocktail.Id == item.Id )
+                {
+                    Console.WriteLine("Название коктейля");
+                    item.Name = Console.ReadLine();
+                    Console.WriteLine("Описание Коктейля");
+                    item.Description = Console.ReadLine();
+                    Console.WriteLine("Ингредиенты");
+                    //Вызов метода выбора ингредиентов
+                    Console.WriteLine("Крепость");
+                    item.Vol = SuppotrMhetods.CheckInt(Console.ReadLine());
 
-            return cocktail;
+                }
+            }                    
+
+            return cocktails;
 
         }
     }
