@@ -1,6 +1,8 @@
 ﻿using CocktailCatalog;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using System.Xml;
+using System.Xml.Linq;
 
 internal class Program
 {
@@ -9,9 +11,9 @@ internal class Program
         //Тестим ветку в GIT///
         // Счётчик коктейлей
         uint idNumber = 1;
+        //Токен телеграма
+        string tokenTelegram = "";
 
-        //Убрать в файлы
-        var tokenTelegram = "6571711315:AAGjvDK6aapilBuwCGhyrbf3d6khq6pBKmw";
 
         //Лист коктейлей
         var cocktails = new List<Cocktail> { };
