@@ -14,7 +14,9 @@ namespace CocktailCatalog.Telegram
     internal class MyTelegramBot
     {
 
-        public static async void StartTelegramBot()
+        public static async 
+        Task
+StartTelegramBot()
         {
            var botClient = new TelegramBotClient(SuppotrMhetods.GetMyTToken());
 
