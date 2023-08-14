@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot;
-using static CocktailCatalog.UsersStateService;
+using static CocktailCatalog.Telegram.UsersStateService;
 
-namespace CocktailCatalog
+namespace CocktailCatalog.Telegram
 {
     internal class TelegramBotService
     {
@@ -84,7 +84,7 @@ namespace CocktailCatalog
                         text: "DALL-E на связи! Чтто хотите сгенерировать?",
                         cancellationToken: cancellationToken
                     );
-                    break;                
+                    break;
                 default:
                     _usersStateService.SetState(chatId, UserState.NoState);
                     await _botClient.SendTextMessageAsync(
@@ -131,7 +131,7 @@ namespace CocktailCatalog
                         text: "Это всего лишь заглушка Dalle",
                         cancellationToken: cancellationToken
                     );
-                    break;                
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(userState));
             }

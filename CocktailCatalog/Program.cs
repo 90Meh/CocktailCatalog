@@ -1,8 +1,8 @@
-﻿using CocktailCatalog;
-using Telegram.Bot;
+﻿using Telegram.Bot;
 using Telegram.Bot.Types;
 using System.Xml;
 using System.Xml.Linq;
+using CocktailCatalog.Telegram;
 
 internal class Program
 {

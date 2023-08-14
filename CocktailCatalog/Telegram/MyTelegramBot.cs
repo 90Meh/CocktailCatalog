@@ -9,31 +9,14 @@ using System.Xml;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 
-namespace CocktailCatalog
+namespace CocktailCatalog.Telegram
 {
     internal class MyTelegramBot
-    {        
+    {
 
         public static async void StartTelegramBot()
         {
-            //Токен телеграмм бота
-            var tokenTelegram = "";
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(@"C:\\bot\token.xml");
-            // получим корневой элемент
-            XmlElement? xRoot = xDoc.DocumentElement;
-            if (xRoot != null)
-            {
-                // обход всех узлов в корневом элементе
-                foreach (XmlElement xnode in xRoot)
-                {
-                    // получаем атрибут value
-                    XmlNode? attr = xnode.Attributes.GetNamedItem("value");
-                    tokenTelegram = attr?.Value;
-                }
-            }
-
-            var botClient = new TelegramBotClient(tokenTelegram);
+           var botClient = new TelegramBotClient(SuppotrMhetods.GetMyTToken());
 
             using CancellationTokenSource cts = new();
 
@@ -59,7 +42,7 @@ namespace CocktailCatalog
 
             // Send cancellation request to stop bot            
             cts.Cancel();
-            
+
         }
     }
 }

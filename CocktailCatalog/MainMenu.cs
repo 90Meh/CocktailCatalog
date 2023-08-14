@@ -50,7 +50,7 @@ namespace CocktailCatalog
                             break;
                         case "ingr":
                             Console.WriteLine("Меню управление ингредиентами");
-                            ingredients = SuppotrMhetods.IngredientMenu(ingredients);
+                            ingredients = Ingredient.IngredientMenu(ingredients);
                             break;
                         case "all":
                             foreach (var item in cocktails)

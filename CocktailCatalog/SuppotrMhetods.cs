@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace CocktailCatalog
 {
@@ -22,46 +23,25 @@ namespace CocktailCatalog
             return vol;
         }
 
-        //Управление инградиентами
-        public static List<Ingredient> IngredientMenu(List<Ingredient> ingredients)
+       //Токен Телеграм
+       public static string GetMyTToken()
         {
-            Console.WriteLine("Выберите действие");
-            Console.WriteLine("XXXX Добавить ингредиент Add XXXX Найти ингредиент Search XXXX\n " +
-                "XXXX Изменить ингредиент Change XXXXX " +
-                "\n XXXXX  Показать все ингредиент All XXXX Выход из меню - Exit");
-            do
+            var tokenTelegram = "|";
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(@"C:\\bot\token.xml");
+            // получим корневой элемент
+            XmlElement? xRoot = xDoc.DocumentElement;
+            if (xRoot != null)
             {
-                var exit = false;
-                var input = Console.ReadLine().ToLower();
-                switch (input)
+                // обход всех узлов в корневом элементе
+                foreach (XmlElement xnode in xRoot)
                 {
-                    case "add":
-                        ingredients.Add(AssemblyObject.CreateIngredient());
-                        break;
-                    case "search":
-                        Console.WriteLine(Ingredient.SearchIngredient(ingredients).Name);                        
-                        break;
-                    case "change":
-                        ingredients = Ingredient.ChangeIngredient(ingredients);
-                        break;
-                    case "all":
-                        foreach (var item in ingredients)
-                        {
-                            Console.WriteLine("Название" + item.Name);
-                        }
-                        break;
-                    case "exit":
-                        exit = true;
-                        break;
-                    default:
-                        Console.WriteLine("Действие не найдено");
-                        break;
+                    // получаем атрибут value
+                    XmlNode? attr = xnode.Attributes.GetNamedItem("value");
+                    tokenTelegram = attr?.Value;
                 }
-                if (exit)
-                {
-                    return ingredients;
-                }
-            } while (true);
+            }
+            return tokenTelegram;
         }
 
     }
