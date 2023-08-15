@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot;
-using System.Xml;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 
