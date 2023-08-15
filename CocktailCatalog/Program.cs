@@ -4,17 +4,35 @@ using System.Xml;
 using System.Xml.Linq;
 using CocktailCatalog.Telegram;
 using CocktailCatalog;
+using System.Text.Json;
 
 internal class Program
 {
+    //Лист коктейлей и има файла сохранённого листа
+    private static List<Cocktail> _cocktails = new List<Cocktail>();
+    private static string _fileName = "baseCocktails.json";
+
+
     private static async Task Main(string[] args)
     {
-        //Тестим ветку dev в GIT//  
+
+        //Ветка dev в GIT//
 
 
-        //MyTelegramBot.StartTelegramBot();
+        //Проверяем наличие файла и создаём если нет.
+        if (!System.IO.File.Exists(_fileName))
+        {
+            var json = System.IO.File.Create(_fileName);
+            _cocktails = JsonSerializer.Deserialize<List<Cocktail>>(json);
+        }
+        else System.IO.File.Create(_fileName);
 
-         await BotTest.BotStart(SuppotrMhetods.GetMyTToken());
-         MainMenu.StartMainMenu();
+
+        //await MyTelegramBot.BotStart(SuppotrMhetods.GetMyTToken());
+       _cocktails = MainMenu.StartMainMenu(_cocktails);
+        
+        //Сохраняем все данные в файл json
+        string jsonString = JsonSerializer.Serialize(_cocktails);
+        System.IO.File.WriteAllText(_fileName, jsonString);
     }
 }

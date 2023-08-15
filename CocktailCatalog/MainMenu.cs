@@ -9,11 +9,10 @@ namespace CocktailCatalog
 {
     internal class MainMenu
     {
-        public static void StartMainMenu()
+        public static List<Cocktail> StartMainMenu(List<Cocktail> cocktails)
         {
-            uint idNumber = 1;
-            //Лист коктейлей
-            var cocktails = new List<Cocktail> { };
+            uint idNumber = 1;            
+            
             //Ингредиенты добавление
             var ingredients = new List<Ingredient> { };
 
@@ -58,6 +57,9 @@ namespace CocktailCatalog
                                 Console.WriteLine(item.Name);
                             }
                             break;
+                        case "exit":
+                            return cocktails;
+
                         default:
                             Console.WriteLine("Действие не найдено");
                             break;
@@ -71,7 +73,7 @@ namespace CocktailCatalog
                 Console.WriteLine("Ошибка приложения!");
             }
 
-
+            return cocktails;
         }
     }
 }

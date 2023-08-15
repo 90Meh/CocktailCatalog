@@ -1,49 +1,104 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Telegram.Bot.Types;
+﻿
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types;
 
 namespace CocktailCatalog.Telegram
 {
     internal class MyTelegramBot
     {
 
-        public static async 
-        Task
-StartTelegramBot()
+        //Метод вызова и создания бота
+        public static async Task BotStart(string tokenBot)
         {
-           var botClient = new TelegramBotClient(SuppotrMhetods.GetMyTToken());
+            using var cts = new CancellationTokenSource();
 
-            using CancellationTokenSource cts = new();
+            var bot = new TelegramBotClient(tokenBot);
 
-            // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
-            ReceiverOptions receiverOptions = new()
-            {
-                AllowedUpdates = Array.Empty<UpdateType>() // receive all update types except ChatMember related updates
-            };
+            var me = await bot.GetMeAsync();
 
-            var service = new TelegramBotService(botClient);
+            Console.Title = me.Username ?? "My awesome Bot";
+            Console.WriteLine($"My bot: {me.Username}");
 
-            botClient.StartReceiving(
-                updateHandler: service.HandleUpdateAsync,
-                pollingErrorHandler: service.HandlePollingErrorAsync,
-                receiverOptions: receiverOptions,
-                cancellationToken: cts.Token
-            );
+            bot.StartReceiving(updateHandler: HandleUpdateAsync,
+                   pollingErrorHandler: HandleErrorAsync,
+                   receiverOptions: new ReceiverOptions()
+                   {
+                       AllowedUpdates = Array.Empty<UpdateType>()
+                   },
+                   cancellationToken: cts.Token);
 
-            var me = await botClient.GetMeAsync();
+            Console.WriteLine($"Start listening for @{me.Username}");           
 
-            Console.WriteLine($"Start listening for @{me.Username}");
             Console.ReadLine();
 
-            // Send cancellation request to stop bot            
             cts.Cancel();
+
+
+        }
+
+        //Позволяет принимать сообщения
+        private static async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cts)
+        {
+            try
+            {                
+                switch (update.Type)
+                {
+                    case UpdateType.Message:
+                        await BotOnMessageReceived(bot, update.Message!);
+                        break;
+                }
+            }
+            catch (Exception exception)
+            {
+                await HandleErrorAsync(bot, exception, cts);
+            }
+
+        }
+
+        //Обработка принятых сообщений
+        private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
+        {
+            Console.WriteLine($"Receive message type: {message.Type}");
+           
+
+            if (message.Type != MessageType.Text)
+                return;
+
+            var action = message.Text!.Split(' ')[0];
+            switch (action)
+            {
+                case "/start":
+                    await StartMessage(botClient, message);
+                    break;                                  
+
+                default:
+                    await Echo(botClient, message);
+                    break;
+            }
+
+        }
+
+        //Отправка сообщений
+        private static async Task StartMessage(ITelegramBotClient botClient, Message message)
+        {
+            var userName = $"{message.From.LastName} {message.From.FirstName}";
+            await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Hello {userName}");
+        }
+        //"Эхо" бот. Отвечает повтором
+         private static async Task Echo(ITelegramBotClient botClient, Message message)
+        {
+            await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{message.Text}");
+        }
+
+        //Обработка ошибок
+        private static Task HandleErrorAsync(ITelegramBotClient bot, Exception exception, CancellationToken cts)
+        {
+            var ErrorMessage = exception.ToString();
+
+            Console.WriteLine(ErrorMessage);
+            return Task.CompletedTask;
 
         }
     }
