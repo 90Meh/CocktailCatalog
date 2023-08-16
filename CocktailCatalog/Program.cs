@@ -16,8 +16,8 @@ internal class Program
     private static async Task Main(string[] args)
     {
         //Ветка dev в GIT//        
-       
-        
+
+
         //Проверяем наличие файла c коктейлями и создаём если нет.
         if (System.IO.File.Exists(_fileName))
         {
@@ -28,8 +28,8 @@ internal class Program
         else using (System.IO.File.Create(_fileName)) ;
 
 
-        //await MyTelegramBot.BotStart(SuppotrMhetods.GetMyTToken());
-        _cocktails = MainMenu.StartMainMenu(_cocktails);
+        await MyTelegramBot.BotStart(SuppotrMhetods.GetMyTToken());
+        //_cocktails = MainMenu.StartMainMenu(_cocktails);
 
 
         //Сохраняем все данные в файл json        

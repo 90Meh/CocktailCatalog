@@ -71,13 +71,22 @@ namespace CocktailCatalog.Telegram
             {
                 case "/start":
                     await StartMessage(botClient, message);
-                    break;                                  
-
+                    break;
+                case "/startgame":
+                    await StartGame(botClient, message);
+                    break; 
                 default:
                     await Echo(botClient, message);
                     break;
             }
 
+        }
+
+        private static async Task StartGame(ITelegramBotClient botClient, Message message)
+        {
+            var game = new QuizGame(botClient, message.Chat);
+            await game.StartAsync();
+           
         }
 
         //Отправка сообщений
