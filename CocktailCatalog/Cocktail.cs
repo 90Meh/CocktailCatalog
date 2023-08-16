@@ -8,7 +8,7 @@ namespace CocktailCatalog
 {
     internal class Cocktail : Interfaces.ICocktail
     {
-        public Cocktail(uint id, string name, string description, List<Ingredient> compound, int vol)
+        public Cocktail(uint id, string name, string description, string compound, int vol)
         {
             Id = id;
             Name = name;
@@ -21,7 +21,7 @@ namespace CocktailCatalog
         public uint Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Ingredient> Compound { get; set; }
+        public string Compound { get; set; }
         public int Vol { get; set; }
 
         //Метод присвоения пустых значений
@@ -30,16 +30,16 @@ namespace CocktailCatalog
             Id = 0;
             Name = string.Empty;
             Description = string.Empty;
-            Compound = new List<Ingredient>();
+            Compound = string.Empty;
             Vol = 0;
         }
 
         //Поиск коктейля
-        public static Cocktail SearchCocktail(List<Cocktail> cocktails, List<Ingredient> ingredients)
+        public static Cocktail SearchCocktail(List<Cocktail> cocktails)
         {
-            Console.WriteLine("Вы можете найти коктейль по его имени, id номеру, крепости, компонентам которые в нём содержатся");
-            Console.WriteLine("Выберите параметр для поиска: Name/Id/Vol/Ingr");
-            var cocktail = new Cocktail(1, string.Empty, string.Empty, ingredients, 1);
+            Console.WriteLine("Вы можете найти коктейль по его имени, id номеру, крепости");
+            Console.WriteLine("Выберите параметр для поиска: Name/Id/Vol");
+            var cocktail = new Cocktail(1, string.Empty, string.Empty, string.Empty, 1);
             bool stop = true;
 
             do
@@ -82,12 +82,8 @@ namespace CocktailCatalog
                                 cocktail = item;
                                 break;
                             }
-                        }                        
-                        break;
-                    case "Ingr":
-                        Console.WriteLine("Введите имя ингредиента для поиска");
-                        //Реализовать поиск по ингредиенту пока возвращает пустой коктейль
-                        break;
+                        }
+                        break;                    
                     default:
                         Console.WriteLine("Команда не распознана. Повторите ввод");
                         stop = false;
@@ -100,25 +96,25 @@ namespace CocktailCatalog
 
         //Изменение коктейля
 
-        public static List<Cocktail> ChangeCoctail(List<Cocktail> cocktails, List<Ingredient> ingredients)
+        public static List<Cocktail> ChangeCoctail(List<Cocktail> cocktails)
         {
-            var cocktail = SearchCocktail(cocktails, ingredients);
+            var cocktail = SearchCocktail(cocktails);
 
             foreach (var item in cocktails)
             {
-                if (cocktail.Id == item.Id )
+                if (cocktail.Id == item.Id)
                 {
                     Console.WriteLine("Название коктейля");
                     item.Name = Console.ReadLine();
                     Console.WriteLine("Описание Коктейля");
                     item.Description = Console.ReadLine();
                     Console.WriteLine("Ингредиенты");
-                    //Вызов метода выбора ингредиентов
+                    item.Compound = Console.ReadLine();                    
                     Console.WriteLine("Крепость");
                     item.Vol = SuppotrMhetods.CheckInt(Console.ReadLine());
 
                 }
-            }                    
+            }
 
             return cocktails;
 

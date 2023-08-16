@@ -33,11 +33,11 @@ namespace CocktailCatalog
                     switch (input)
                     {
                         case "add":
-                            cocktails.Add(AssemblyObject.CreateCocktail(idNumber, ingredients));
+                            cocktails.Add(AssemblyObject.CreateCocktail(idNumber));
                             idNumber++;
                             break;
                         case "search":
-                            var foundCocktail = Cocktail.SearchCocktail(cocktails, ingredients);
+                            var foundCocktail = Cocktail.SearchCocktail(cocktails);
                             Console.WriteLine($"Имя - {foundCocktail.Name}");
                             Console.WriteLine($"Id - {foundCocktail.Id}");
                             Console.WriteLine($"Описание - {foundCocktail.Description}");
@@ -45,7 +45,7 @@ namespace CocktailCatalog
                             break;
                         case "change":
                             Console.WriteLine("Выберите коктейль для изменения");
-                            cocktails = Cocktail.ChangeCoctail(cocktails, ingredients);
+                            cocktails = Cocktail.ChangeCoctail(cocktails);
                             break;
                         case "ingr":
                             Console.WriteLine("Меню управление ингредиентами");

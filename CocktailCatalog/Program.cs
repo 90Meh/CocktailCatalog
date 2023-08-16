@@ -9,30 +9,33 @@ using System.Text.Json;
 internal class Program
 {
     //Лист коктейлей и има файла сохранённого листа
-    private static List<Cocktail> _cocktails = new List<Cocktail>();
+    private static List<Cocktail> _cocktails = new List<Cocktail> { };
     private static string _fileName = "baseCocktails.json";
 
 
     private static async Task Main(string[] args)
     {
-
-        //Ветка dev в GIT//
-
-
-        //Проверяем наличие файла и создаём если нет.
-        if (!System.IO.File.Exists(_fileName))
+        //Ветка dev в GIT//        
+       
+        
+        //Проверяем наличие файла c коктейлями и создаём если нет.
+        if (System.IO.File.Exists(_fileName))
         {
-            var json = System.IO.File.Create(_fileName);
+            string json = System.IO.File.ReadAllText(_fileName);
             _cocktails = JsonSerializer.Deserialize<List<Cocktail>>(json);
+
         }
-        else System.IO.File.Create(_fileName);
+        else using (System.IO.File.Create(_fileName)) ;
 
 
         //await MyTelegramBot.BotStart(SuppotrMhetods.GetMyTToken());
-       _cocktails = MainMenu.StartMainMenu(_cocktails);
-        
-        //Сохраняем все данные в файл json
+        _cocktails = MainMenu.StartMainMenu(_cocktails);
+
+
+        //Сохраняем все данные в файл json        
         string jsonString = JsonSerializer.Serialize(_cocktails);
         System.IO.File.WriteAllText(_fileName, jsonString);
+
+
     }
 }

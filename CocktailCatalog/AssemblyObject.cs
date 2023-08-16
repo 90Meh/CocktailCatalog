@@ -9,15 +9,14 @@ namespace CocktailCatalog
     internal static class AssemblyObject
     {
         //Метод порождающий коктейль.
-        public static Cocktail CreateCocktail(uint id, List<Ingredient> compound)
+        public static Cocktail CreateCocktail(uint id)
         {
             Console.WriteLine("Введите название коктеля");
             var name = Console.ReadLine();
             Console.WriteLine("Введите описание коктейля");
             var description = Console.ReadLine();
             Console.WriteLine("Выберите ингредиенты");
-            //Написать логику для ингредиентов, с возможностью добавления или изменения отсюда и выводом списка ингредиентов.
-            //Пока получаем готовый список
+            var compound = Console.ReadLine();
             Console.WriteLine("Укажите крепость алкоголя");            
             int vol = SuppotrMhetods.CheckInt(Console.ReadLine());            
             var coctail = new Cocktail(id, name, description, compound, vol);
