@@ -3,11 +3,16 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
+using CocktailCatalog.Interfaces;
+using LinqToDB.Data;
+using LinqToDB;
 
 namespace CocktailCatalog.Telegram
 {
     internal class MyTelegramBot
     {
+        static DataConnection db = new LinqToDB.Data.DataConnection(ProviderName.PostgreSQL, Config.SqlConnectionString);
+        private static uint id = 0;
 
         //Метод вызова и создания бота
         public static async Task BotStart(string tokenBot)
@@ -67,18 +72,40 @@ namespace CocktailCatalog.Telegram
                 return;
 
             var action = message.Text!.Split(' ')[0];
+
             switch (action)
             {
-                case "/start":
-                    await StartMessage(botClient, message);
+                case "/add":
+                    MethodMMenu.AddCocktail(id, "ТИмя", "ТОписание", "ТСостав", 5);
+                    id++;
                     break;
-                case "/startgame":
-                    await StartGame(botClient, message);
-                    break; 
+                case "/search":
+                    var cocktail = MethodMMenu.SearchCocktail();
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{cocktail.Id} {cocktail.Name}, {cocktail.Description}, {cocktail.Compound} ,{cocktail.Vol}");                    
+                    break;
+                case "/change":                    
+                    break;
+                case "/ingr":                    
+                    break;
+                case "/all":                    
+                    break;
+                case "/exit":
                 default:
-                    await Echo(botClient, message);
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Действие не найдено");
                     break;
             }
+            //switch (action)
+            //{
+            //    case "/start":
+            //        await StartMessage(botClient, message);
+            //        break;
+            //    case "/startgame":
+            //        await StartGame(botClient, message);
+            //        break; 
+            //    default:
+            //        await Echo(botClient, message);
+            //        break;
+            //}
 
         }
 
