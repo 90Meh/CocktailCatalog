@@ -118,8 +118,7 @@ namespace CocktailCatalog.Telegram
                         state = State.start;
                         break;
                     case "/del":
-                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите Id для удаления");
-                        await botClient.SendPhotoAsync(chatId: )
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите Id для удаления");                       
                         state = State.del;
                         break;
                     default:
