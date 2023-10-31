@@ -9,7 +9,7 @@ using System.Xml;
 
 namespace CocktailCatalog
 {
-    internal static class SuppotrMhetods
+    internal static class SuppotrMethods
     {
 
         //Повторный запрос числа при ошибке
@@ -44,5 +44,12 @@ namespace CocktailCatalog
             }
             return tokenTelegram;
         }       
+       
+        //id из даты
+
+        public static uint GetMeId()
+        {            
+            return (uint)(DateTime.Now - new DateTime(2023, 1, 1)).TotalSeconds;
+        }
     }
 }

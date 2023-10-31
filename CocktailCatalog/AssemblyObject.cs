@@ -18,21 +18,9 @@ namespace CocktailCatalog
             Console.WriteLine("Выберите ингредиенты");
             var compound = Console.ReadLine();
             Console.WriteLine("Укажите крепость алкоголя");            
-            int vol = SuppotrMhetods.CheckInt(Console.ReadLine());            
-            var coctail = new Cocktail(id, name, description, compound, vol);
-            return coctail;
-        }
-        //Метод порождающий ингредиент
-        public static Ingredient CreateIngredient()
-        {
-            Console.WriteLine("Введите название ингредиента");
-            var name = Console.ReadLine();
-            Console.WriteLine("Введите описание ингредиента");
-            var description = Console.ReadLine();           
-            Console.WriteLine("Укажите крепость ингредиента");
-            int vol = SuppotrMhetods.CheckInt(Console.ReadLine()); 
-            var ingredient = new Ingredient(name, description, vol);
-            return ingredient;
-        }
+            int vol = SuppotrMethods.CheckInt(Console.ReadLine());            
+            var cocktail = AssemblyObject.CreateCocktail(id);
+            return cocktail;
+        }        
     }
 }

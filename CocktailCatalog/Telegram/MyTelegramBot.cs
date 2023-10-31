@@ -11,12 +11,20 @@ namespace CocktailCatalog.Telegram
 {
     internal class MyTelegramBot
     {
+        
+        static State state = State.start;
+        static StateAdd stateAdd = StateAdd.id;
         static DataConnection db = new LinqToDB.Data.DataConnection(ProviderName.PostgreSQL, Config.SqlConnectionString);
         private static uint id = 0;
-
+        static string nameAdd = string.Empty;
+        static string decriptionAdd = string.Empty;
+        static string compoundAdd = string.Empty;
+        static string volAdd = string.Empty;
+        static string changeName = string.Empty;
         //Метод вызова и создания бота
         public static async Task BotStart(string tokenBot)
         {
+
             using var cts = new CancellationTokenSource();
 
             var bot = new TelegramBotClient(tokenBot);
@@ -34,7 +42,7 @@ namespace CocktailCatalog.Telegram
                    },
                    cancellationToken: cts.Token);
 
-            Console.WriteLine($"Start listening for @{me.Username}");           
+            Console.WriteLine($"Start listening for @{me.Username}");
 
             Console.ReadLine();
 
@@ -46,8 +54,9 @@ namespace CocktailCatalog.Telegram
         //Позволяет принимать сообщения
         private static async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cts)
         {
+
             try
-            {                
+            {
                 switch (update.Type)
                 {
                     case UpdateType.Message:
@@ -65,56 +74,165 @@ namespace CocktailCatalog.Telegram
         //Обработка принятых сообщений
         private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
         {
+
             Console.WriteLine($"Receive message type: {message.Type}");
-           
 
             if (message.Type != MessageType.Text)
                 return;
 
-            var action = message.Text!.Split(' ')[0];
+            var action = message.Text!.Split(' ')[0].ToLower();
 
-            switch (action)
+
+            //Основное меню
+            if (state == State.start)
             {
-                case "/add":
-                    MethodMMenu.AddCocktail(id, "ТИмя", "ТОписание", "ТСостав", 5);
-                    id++;
-                    break;
-                case "/search":
-                    var cocktail = MethodMMenu.SearchCocktail();
-                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{cocktail.Id} {cocktail.Name}, {cocktail.Description}, {cocktail.Compound} ,{cocktail.Vol}");                    
-                    break;
-                case "/change":                    
-                    break;
-                case "/ingr":                    
-                    break;
-                case "/all":                    
-                    break;
-                case "/exit":
-                default:
-                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Действие не найдено");
-                    break;
+                await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
+              $"Найти Коктейль /Search" +
+              $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
+              $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                switch (action)
+                {
+                    case "/add":
+                        state = State.add;
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Вы хотите создать коктейль?:)");
+                        break;
+                    case "/search":
+                        state = State.search;
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите имя коктейля");
+                        break;
+                    case "/change":
+                        state = State.change;
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите имя коктейля для изменения");
+                        break;
+                    case "/all":
+                        var cocktailAll = MethodMMenu.AllCocktail();
+                        foreach (var item in cocktailAll)
+                        {
+                            await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{item.Id} {item.Name}, {item.Description}, {item.Compound} ,{item.Vol}");
+                        }
+                        break;
+                    case "/start":
+                        state = State.start;
+                        break;
+                    default:
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Действие не найдено");
+                        break;
+                }
+
             }
-            //switch (action)
-            //{
-            //    case "/start":
-            //        await StartMessage(botClient, message);
-            //        break;
-            //    case "/startgame":
-            //        await StartGame(botClient, message);
-            //        break; 
-            //    default:
-            //        await Echo(botClient, message);
-            //        break;
-            //}
+
+            //Вызов методов для работы с БД
+            else if (state == State.add)
+            {
+                uint id = SuppotrMethods.GetMeId();
+                if (stateAdd == StateAdd.id)
+                {
+                    stateAdd = StateAdd.name;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите название коктейля");
+                }
+                else if (stateAdd == StateAdd.name)
+                {
+                    nameAdd = message.Text;
+                    stateAdd = StateAdd.description;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите описание коктейля");
+                }
+                else if (stateAdd == StateAdd.description)
+                {
+                    decriptionAdd = message.Text;
+                    stateAdd = StateAdd.compound;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите состав коктейля");
+                }
+                else if (stateAdd == StateAdd.compound)
+                {
+                    compoundAdd = message.Text;
+                    stateAdd = StateAdd.vol;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите крепость коктейля");
+                }
+                else if (stateAdd == StateAdd.vol)
+                {
+                    volAdd = message.Text;
+                    var add = MethodMMenu.AddCocktail(id, nameAdd, decriptionAdd, compoundAdd, volAdd);
+                    stateAdd = StateAdd.id;
+                    state = State.start;
+                    if (add)
+                    {await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль добавлен");}
+                    else { await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Неверно указана крепость"); }
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
+                    $"Найти Коктейль /Search" +
+                    $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
+                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                }
+
+            }
+
+            else if (state == State.search)
+            {
+                List<Cocktail> cocktails = MethodMMenu.SearchCocktail(message.Text);
+                if (cocktails.Count > 0)
+                {                    foreach (var item in cocktails)
+                    {
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{item.Id} {item.Name}, {item.Description}, {item.Compound} ,{item.Vol}");
+                    }
+                }
+                else
+                {
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль не найден");
+                }
+                await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
+                    $"Найти Коктейль /Search" +
+                    $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
+                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                state = State.start;
+            }
+
+            else if (state == State.change)
+            {
+                if (stateAdd == StateAdd.id)
+                {
+                    changeName = message.Text;
+                    stateAdd = StateAdd.name;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите название коктейля");
+                }
+                else if (stateAdd == StateAdd.name)
+                {
+                    nameAdd = message.Text;
+                    stateAdd = StateAdd.description;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите описание коктейля");
+                }
+                else if (stateAdd == StateAdd.description)
+                {
+                    decriptionAdd = message.Text;
+                    stateAdd = StateAdd.compound;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите состав коктейля");
+                }
+                else if (stateAdd == StateAdd.compound)
+                {
+                    compoundAdd = message.Text;
+                    stateAdd = StateAdd.vol;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите крепость коктейля");
+                }
+                else if (stateAdd == StateAdd.vol)
+                {
+                    volAdd = message.Text;
+                    MethodMMenu.ChangeCocktail(changeName, nameAdd, decriptionAdd, compoundAdd, volAdd);
+                    stateAdd = StateAdd.id;
+                    state = State.start;
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль изменён");
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
+                    $"Найти Коктейль /Search" +
+                    $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
+                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                }                
+            }
+
+            else if (state == State.all)
+            {
+                MethodMMenu.AllCocktail();
+            }
+
 
         }
 
-        private static async Task StartGame(ITelegramBotClient botClient, Message message)
-        {
-            var game = new QuizGame(botClient, message.Chat);
-            await game.StartAsync();
-           
-        }
 
         //Отправка сообщений
         private static async Task StartMessage(ITelegramBotClient botClient, Message message)
@@ -123,7 +241,7 @@ namespace CocktailCatalog.Telegram
             await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Hello {userName}");
         }
         //"Эхо" бот. Отвечает повтором
-         private static async Task Echo(ITelegramBotClient botClient, Message message)
+        private static async Task Echo(ITelegramBotClient botClient, Message message)
         {
             await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{message.Text}");
         }
@@ -137,5 +255,7 @@ namespace CocktailCatalog.Telegram
             return Task.CompletedTask;
 
         }
+
+
     }
 }
