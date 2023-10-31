@@ -20,15 +20,10 @@ namespace CocktailCatalog.Telegram
                 using (var connection = new NpgsqlConnection(Config.SqlConnectionString))
                 {
                     connection.Execute(query);
-                }
-                return true;
+                }               
             }
-            else
-            {
-                return false;
-            }
+            return alc;
         }
-
 
         //Поиск коктейля по имени
         public static List<Cocktail> SearchCocktail(string name)
@@ -64,5 +59,25 @@ namespace CocktailCatalog.Telegram
             }
         }
 
+        //Удаление элемента
+        public static bool DeleteCocktail(string id)
+        {
+            var i = int.TryParse(id, out _);
+
+            if (i)
+            {
+                var query =
+                           $@"DELETE FROM public.""Cocktail""
+	                        WHERE ""Id"" = {id};";
+
+                using (var connection = new NpgsqlConnection(Config.SqlConnectionString))
+                {
+                    connection.Execute(query);
+                }
+                
+            }
+            return i;
+
+        }
     }
 }

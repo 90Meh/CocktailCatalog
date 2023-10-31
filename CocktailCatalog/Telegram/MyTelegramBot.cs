@@ -92,7 +92,7 @@ namespace CocktailCatalog.Telegram
                 await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
               $"Найти Коктейль /Search" +
               $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
-              $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+              $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start XXXX Удалить коктейль /Del");
                 switch (action)
                 {
                     case "/add":
@@ -111,11 +111,16 @@ namespace CocktailCatalog.Telegram
                         var cocktailAll = MethodMMenu.AllCocktail();
                         foreach (var item in cocktailAll)
                         {
-                            await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{item.Id} {item.Name}, {item.Description}, {item.Compound} ,{item.Vol}");
+                            await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Id {item.Id} \n {item.Name},\n {item.Description}, {item.Compound} ,\nКрепость {item.Vol}");
                         }
                         break;
                     case "/start":
                         state = State.start;
+                        break;
+                    case "/del":
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите Id для удаления");
+                        await botClient.SendPhotoAsync(chatId: )
+                        state = State.del;
                         break;
                     default:
                         await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Действие не найдено");
@@ -174,7 +179,7 @@ namespace CocktailCatalog.Telegram
                 if (cocktails.Count > 0)
                 {                    foreach (var item in cocktails)
                     {
-                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"{item.Id} {item.Name}, {item.Description}, {item.Compound} ,{item.Vol}");
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $" ID {item.Id} \n{item.Name},\n {item.Description}, {item.Compound} ,\n Крепость{item.Vol}");
                     }
                 }
                 else
@@ -231,6 +236,16 @@ namespace CocktailCatalog.Telegram
             else if (state == State.all)
             {
                 MethodMMenu.AllCocktail();
+            }
+            
+            else if(state == State.del) 
+            {
+               var d =  MethodMMenu.DeleteCocktail(message.Text);
+                if (!d)
+                {
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль не найден");                    
+                }
+                state = State.start;
             }
 
 

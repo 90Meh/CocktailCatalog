@@ -8,7 +8,8 @@ namespace CocktailCatalog
         add,
         search,
         change,
-        all
+        all,
+        del
     }
 
     internal enum StateAdd
