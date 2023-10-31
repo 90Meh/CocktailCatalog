@@ -3,7 +3,6 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
-using CocktailCatalog.Interfaces;
 using LinqToDB.Data;
 using LinqToDB;
 
@@ -11,16 +10,20 @@ namespace CocktailCatalog.Telegram
 {
     internal class MyTelegramBot
     {
-        
-        static State state = State.start;
-        static StateAdd stateAdd = StateAdd.id;
+        //Enum хранят состояния
+        private static State state = State.start;
+        private static StateAdd stateAdd = StateAdd.id;
+
         static DataConnection db = new LinqToDB.Data.DataConnection(ProviderName.PostgreSQL, Config.SqlConnectionString);
+
+        //Переменные для методов
         private static uint id = 0;
-        static string nameAdd = string.Empty;
-        static string decriptionAdd = string.Empty;
-        static string compoundAdd = string.Empty;
-        static string volAdd = string.Empty;
-        static string changeName = string.Empty;
+        private static string nameAdd = string.Empty;
+        private static string decriptionAdd = string.Empty;
+        private static string compoundAdd = string.Empty;
+        private static string volAdd = string.Empty;
+        private static string changeName = string.Empty;
+
         //Метод вызова и создания бота
         public static async Task BotStart(string tokenBot)
         {
