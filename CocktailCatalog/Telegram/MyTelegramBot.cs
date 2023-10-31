@@ -167,7 +167,7 @@ namespace CocktailCatalog.Telegram
                     await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
                     $"Найти Коктейль /Search" +
                     $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
-                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start XXXX Удалить коктейль /Del");
                 }
 
             }
@@ -188,7 +188,7 @@ namespace CocktailCatalog.Telegram
                 await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
                     $"Найти Коктейль /Search" +
                     $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
-                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start XXXX Удалить коктейль /Del");
                 state = State.start;
             }
 
@@ -228,7 +228,7 @@ namespace CocktailCatalog.Telegram
                     await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
                     $"Найти Коктейль /Search" +
                     $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
-                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start");
+                    $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start XXXX Удалить коктейль /Del");
                 }                
             }
 
