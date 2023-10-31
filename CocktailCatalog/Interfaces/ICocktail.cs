@@ -15,7 +15,7 @@ namespace CocktailCatalog.Interfaces
         //Описание
         string Description { get; set; }
         //Лист игредиентов
-        List<Ingredient> Compound { get; set; }
+        string Compound { get; set; }
         //Крепость
         int Vol { get; set; }
 
