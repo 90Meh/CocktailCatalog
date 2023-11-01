@@ -57,7 +57,6 @@ namespace CocktailCatalog.Telegram
         //Позволяет принимать сообщения
         private static async Task HandleUpdateAsync(ITelegramBotClient bot, Update update, CancellationToken cts)
         {
-
             try
             {
                 switch (update.Type)
@@ -71,7 +70,6 @@ namespace CocktailCatalog.Telegram
             {
                 await HandleErrorAsync(bot, exception, cts);
             }
-
         }
 
         //Обработка принятых сообщений
@@ -244,6 +242,7 @@ namespace CocktailCatalog.Telegram
                 {
                     await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль не найден");                    
                 }
+                await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль удалён");
                 state = State.start;
             }
 

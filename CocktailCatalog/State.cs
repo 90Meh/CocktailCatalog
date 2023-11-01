@@ -2,6 +2,7 @@
 
 namespace CocktailCatalog
 {
+    //Перечисления для хранения состояния меню.
     internal enum State
     {
         start,
