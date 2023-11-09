@@ -5,11 +5,14 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using LinqToDB.Data;
 using LinqToDB;
+using File = System.IO.File;
 
-namespace CocktailCatalog.Telegram
+namespace CocktailCatalog.TelegramM
 {
     internal class MyTelegramBot
     {
+        private const string patchPhoto = "sda";
+
         //Enum хранят состояния
         private static State state = State.start;
         private static StateAdd stateAdd = StateAdd.id;
@@ -74,7 +77,7 @@ namespace CocktailCatalog.Telegram
 
         //Обработка принятых сообщений
         private static async Task BotOnMessageReceived(ITelegramBotClient botClient, Message message)
-        {
+        {            
 
             Console.WriteLine($"Receive message type: {message.Type}");
 
@@ -109,14 +112,26 @@ namespace CocktailCatalog.Telegram
                         var cocktailAll = MethodMMenu.AllCocktail();
                         foreach (var item in cocktailAll)
                         {
-                            await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Id {item.Id} \n {item.Name},\n {item.Description}, {item.Compound} ,\nКрепость {item.Vol}");
+                            try
+                            {
+                                Task task = botClient.SendPhotoAsync(chatId: message.Chat.Id,
+                                    InputFile.FromStream(File.Open("CocktailGeneral.jpg", FileMode.Open)));                               
+                                await botClient.SendTextMessageAsync(chatId: message.Chat.Id,
+                                    text: $"Id {item.Id} \n {item.Name},\n {item.Description}, {item.Compound} ,\nКрепость {item.Vol}");
+                            }
+                            catch(Exception ex)
+                            {
+                                Console.WriteLine("Ошибка при работе с иконкой коктейля");
+                                Console.WriteLine(ex.Message);
+                            }
+                           
                         }
                         break;
                     case "/start":
                         state = State.start;
                         break;
                     case "/del":
-                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите Id для удаления");                       
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Введите Id для удаления");
                         state = State.del;
                         break;
                     default:
@@ -160,7 +175,7 @@ namespace CocktailCatalog.Telegram
                     stateAdd = StateAdd.id;
                     state = State.start;
                     if (add)
-                    {await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль добавлен");}
+                    { await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль добавлен"); }
                     else { await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Неверно указана крепость"); }
                     await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"\"XXXX Добавить коктейль /Add XXXX " +
                     $"Найти Коктейль /Search" +
@@ -173,10 +188,17 @@ namespace CocktailCatalog.Telegram
             else if (state == State.search)
             {
                 List<Cocktail> cocktails = MethodMMenu.SearchCocktail(message.Text);
+
+                //Не могу применить using не даёт работать с iDisposable объектами. Попробовать через таски
                 if (cocktails.Count > 0)
-                {                    foreach (var item in cocktails)
+                {
+                    foreach (var item in cocktails)
                     {
-                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $" ID {item.Id} \n{item.Name},\n {item.Description}, {item.Compound} ,\n Крепость{item.Vol}");
+                        await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text:
+                            $" ID {item.Id} \n{item.Name},\n {item.Description}, {item.Compound} ,\n Крепость{item.Vol}");
+
+                        await botClient.SendPhotoAsync(chatId: message.Chat.Id, 
+                            Telegram.Bot.Types.InputFile.FromStream(File.Open("CocktailGeneral.jpg", FileMode.Open)));
                     }
                 }
                 else
@@ -227,20 +249,20 @@ namespace CocktailCatalog.Telegram
                     $"Найти Коктейль /Search" +
                     $"\"XXXX Изменить коктейль /Change XXXXX \" +\r\n" +
                     $"\"\\n XXXXX  Показать все коктейли /All XXXX\"  Вернуться в начало /Start XXXX Удалить коктейль /Del");
-                }                
+                }
             }
 
             else if (state == State.all)
             {
                 MethodMMenu.AllCocktail();
             }
-            
-            else if(state == State.del) 
+
+            else if (state == State.del)
             {
-               var d =  MethodMMenu.DeleteCocktail(message.Text);
+                var d = MethodMMenu.DeleteCocktail(message.Text);
                 if (!d)
                 {
-                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль не найден");                    
+                    await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль не найден");
                 }
                 await botClient.SendTextMessageAsync(chatId: message.Chat.Id, text: $"Коктейль удалён");
                 state = State.start;

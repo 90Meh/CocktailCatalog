@@ -2,7 +2,7 @@
 using Dapper;
 using Npgsql;
 
-namespace CocktailCatalog.Telegram
+namespace CocktailCatalog.TelegramM
 {
     internal static class MethodMMenu
     {

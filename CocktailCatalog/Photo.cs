@@ -8,6 +8,7 @@ namespace CocktailCatalog
 {
     internal class Photo
     {       
+        
         public Photo(uint id, string path)
         {
             Id = id;
